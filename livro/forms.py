@@ -8,7 +8,7 @@ from datetime import date #importar o date do datetime
 class RegistoLivro(forms.ModelForm): #criar a classe RegistoLivro que herda de forms.ModelForm, vai utilizar o modelo Livros
     class Meta: #criar a classe Meta para definir o modelo e os campos do formulário
         model = Livros #definir o modelo
-        fields = ['nome', 'autor', 'co_autor', 'data_registo', 'emprestado', 'isbn', 'editora', 'ano', 'categoria', 'utilizador', 'estado_leitura'] #definir os campos do formulário
+        fields = ['img', 'nome', 'autor', 'co_autor', 'data_registo', 'emprestado', 'isbn', 'editora', 'ano', 'categoria', 'utilizador', 'estado_leitura'] #definir os campos do formulário
 
     def __init__(self, *args, **kwargs): #criar o método __init__ para definir os widgets dos campos do formulário
         super(RegistoLivro, self).__init__(*args, **kwargs) #chamar o método __init__ da classe pai

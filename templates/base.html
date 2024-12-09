@@ -10,15 +10,37 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
     <title>{% block 'titulo' %}Jardim de Folhas Soltas{% endblock %}</title>
+    
+    <!-- CSS -->
     {% block 'head' %} {% endblock %}
+    <style>
+      .auth{
+        background-image: url('{% static "images/livroback.png" %}');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        height: 100vh;
+      }
+
+      .reg{
+        background-image: url('{% static "images/livroback.png" %}');
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        height: 100vh;
+
+      }
+
+    </style>
   </head>
+ 
   <body>
     
     <nav class="navbar fixed" style="background-color: #e3f2fd;">
       <div class="container-fluid">
         <!-- Nome do projeto na barra de navegação -->
         <a class="navbar-brand" href="{% url 'home' %}">
-          <images src="{% static 'static/images/beautiful.ico' %}" alt="Logo" width="50" height="50" class="m-2">
+          <img src="{% static 'images/beautiful.ico' %}" alt="Logo" width="50" height="50" class="m-2">
           Jardim de Folhas Soltas
         </a>
       
@@ -45,10 +67,12 @@
     <!-- Título principal no corpo da página-->
     <header> 
       <div class="d-flex justify-content-center align-items-center mt-3"> 
-        <images src="{% static 'static/images/beautiful.ico' %}" alt="Logo" width="50" height="50" class="me-2"> 
+        <images src="{% static 'images/beautiful.ico' %}" alt="Logo" width="50" height="50" class="me-2"> 
         <h1>“Um livro é um sonho que você segura com as mãos.”</h1> 
       </div> 
     </header>
+    <br>
+    <br>
 
     <!-- Bloco para o conteúdo dinâmico -->
     {% block 'conteudo' %} {% endblock %}

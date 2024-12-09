@@ -75,7 +75,7 @@ def ver_livro(request, id):
     return redirect('/auth/login/?status=2')   
           
    
-def registar_livro(request, id): #criar a função registar_livro que recebe um request
+def registar_livro(request): #criar a função registar_livro que recebe um request
     if request.method == 'POST': #se o método da requisição for POST
         form = RegistoLivro(request.POST, request.Files) #criar uma instância do formulário RegistoLivro com os dados do formulário
         
@@ -90,7 +90,7 @@ def excluir_livro(request, id): #criar a função excluir_livro que recebe um re
         livros = Livros.objects.get(id = id) #obter o livro com o id passado na url
         return redirect('/auth/login/?status=2')
 
-def registar_categoria(request, id): #criar a função registar_categoria que recebe um request
+def registar_categoria(request): #criar a função registar_categoria que recebe um request
     form = CategoriaLivro(request.POST) #criar uma instância do formulário CategoriaLivro com os dados do formulário
     nome = form.data['nome'] #obter o nome do formulário
     descricao = form.data['descricao'] #obter a descrição do formulário

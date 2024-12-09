@@ -67,7 +67,11 @@
             <div class="col-md">
                 <div class="card" style="width: 18rem;">
                   <div class="card-body">
-                    <img width="100%" src="{% media 'capa_livro/beautiful-girl-reading.jpg'}" alt="{{livro.nome}}">
+                    {% if livro.img %}
+                    <img width="100%" src="{{livro.img.url}}" alt="{{livro.nome}}">
+                    {% else %}
+                    <img width="100%" src="/static/images/jardimlivro.jpg" alt="{{livro.nome}}">
+                    {% endif %}
 
                     <h5 class="card-title">{{livro.nome}}</h5>
                     <h6 style="display: inline;" class="card-subtitle mb-2 text-muted">Emprestado: </h6>
