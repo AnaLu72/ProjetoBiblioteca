@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+
+{% block 'titulo' %}Login{% endblock %}
+
+{% block 'conteudo' %} 
+
+<div class="container"> <!-- class para centralizar o conteudo -->
+    <br>
+    {% if status == '1' %}
+    <div class="alert alert-danger" role="alert">
+        Email ou password incorretos!
+    </div>
+    {% endif %}
+
+    {% if status == '2' %}
+    <div class="alert alert-danger" role="alert">
+        Faça login antes de tentar acessar o sistema!
+    </div>
+    {% endif %}
+
+    <div class="row"> <!--divisao de 12 colunas--> 
+        <br>
+        <div class="col-md-3"></div> <!-- col-md-3 significa que a divisao de 12 colunas vai ser aplicada a partir de 768px de largura da tela -->
+
+        <div class="col-md">
+            <h1>Login</h1>
+            <hr>
+
+            <form method="POST" action="{% url 'validar_login' %}"> <!-- metodo post para enviar os dados para o servidor e action para indicar o que vai acontecer quando o formulario for enviado para o servidor e token para evitar ataques de tipo csrf -->
+                {% csrf_token %}
+                <label>Email</label>
+                <input name="email" class="form-control" type="email" placeholder="Email...">
+                <br>
+                <label>Password</label>
+                <input name="password" class="form-control" type="password" placeholder="Password...">
+                <br>
+                <input class="btn btn-info btn-lg" type="submit" value="Enviar">
+                <a href="{% url 'registo' %}" class="btn btn-warning btn-lg">Registo</a>
+            </form>
+        </div>
+
+        <div class="col-md-3"></div>
+    </div>
+</div>
+{% endblock %}

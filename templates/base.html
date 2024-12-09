@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="pt-PT">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    {% load static %}
+    <link rel="icon" type="image/x-icon" href="{% static 'images/favicon.ico' %}"> 
+    
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
+    <title>{% block 'titulo' %}Jardim de Folhas Soltas{% endblock %}</title>
+    {% block 'head' %} {% endblock %}
+  </head>
+  <body>
+    
+    <nav class="navbar fixed" style="background-color: #e3f2fd;">
+      <div class="container-fluid">
+        <!-- Nome do projeto na barra de navegação -->
+        <a class="navbar-brand" href="{% url 'home' %}">
+          <images src="{% static 'static/images/beautiful.ico' %}" alt="Logo" width="50" height="50" class="m-2">
+          Jardim de Folhas Soltas
+        </a>
+      
+        <!-- Verificar se o utilizador está autenticado-->
+        {% if utilizador_autenticado %}
+        <div class="dropdown">
+          <!-- Botão do Menu -->
+          <a class="btn btn-primary dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" aria-expanded="false" style="margin-right: 100px;">
+           Menu
+          </a>
+      
+          <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuLink">
+            <button type="button" class="btn btn-primary dropdown-item" data-bs-toggle="modal" data-bs-target="#exampleModal">Opções</button>
+            <a href="{% url 'meus_emprestimos' %}" class="btn btn-danger dropdown-item"> Meus Empréstimos</a>
+            <a href="{% url 'logout' %}" class="btn btn-danger dropdown-item">Sair</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item">Total: {{total_livro}}</a>
+          </div>
+        </div>    
+        {% endif %}
+      </div>
+    </nav>
+
+    <!-- Título principal no corpo da página-->
+    <header> 
+      <div class="d-flex justify-content-center align-items-center mt-3"> 
+        <images src="{% static 'static/images/beautiful.ico' %}" alt="Logo" width="50" height="50" class="me-2"> 
+        <h1>“Um livro é um sonho que você segura com as mãos.”</h1> 
+      </div> 
+    </header>
+
+    <!-- Bloco para o conteúdo dinâmico -->
+    {% block 'conteudo' %} {% endblock %}
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- Formulario de Registo -->
+    {% if utilizador_autenticado %} 
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Registar / Emprestar / Devolver</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            <span aria-hidden="true"></span>  
+          </div>
+          <div class="modal-body">
+            <!-- Botões para selecionar a categoria, livro, emprestimo ou devolução -->
+            <button style="margin-left: 5px;" onclick="mostrar_form(1)" class="btn btn-info">Categoria</button>
+            <button style="margin-left: 5px;" onclick="mostrar_form(2)" class="btn btn-warning">Livro</button>
+            <button style="margin-left: 5px;" onclick="mostrar_form(3)" class="btn btn-primary">Emprestimo</button>
+            <button style="margin-left: 5px;" onclick="mostrar_form(4)" class="btn btn-danger">Devolução</button>
+            <br>
+
+            <hr>
+            <!-- Formulário para registar Livro -->
+            <div style="display: none;" id="livro">
+              <form action="{% url 'registar_livro' %}"  method="POST" enctype="multipart/form-data"> <!-- enctype="multipart/form-data" para poder enviar imagem -->
+                {% csrf_token %}
+                <table>
+                  {{form.as_table}}
+                </table>
+                <br>
+                <Input type="submit" class="btn btn-success" value="Registar">
+              </form>
+            </div>
+
+            <!-- Formulário para registar Categoria -->
+            <div style="display: none;" id="categoria">
+              <form action="{% url 'registar_categoria' %}" method="POST">
+                {% csrf_token %}
+                <table>
+                  {{form_categoria.as_table}}
+                </table>
+                <input type="hidden" name="utilizador" value="{{utilizador_autenticado}}">
+                <Input class="btn btn-success" type="submit" value="Enviar">
+              </form>
+            </div>
+
+
+            <!-- Formulário para registrar Emprestimo -->
+            <div style="display: none;" id="emprestimos">
+              
+              <button onclick="exibe_input_emprestado(1)" class="btn btn-success">Utilizador novo</button>
+              <button onclick="exibe_input_emprestado(2)" class="btn btn-dark">Utilizador existente</button>
+              <br><br>
+              <form id="form_emprestimo" action="{% url 'registar_emprestimo' %}" method="POST">
+                {% csrf_token %}
+
+                <select class="form-control" style="display: none;" id="nome_emprestado" name="nome_emprestado">
+
+                  {% for utilizador in utilizadores %}
+                    <option value="{{utilizador.id}}">{{utilizador.nome}}</option>
+                  {% endfor %}
+                </select>
+                <br>
+                <input id="nome_emprestado_anonimo" type="text" placeholder="Digite o nome para quem emprestou" name="nome_emprestado_anonimo" class="form-control">
+                <br>
+                <select class="form-control" name="livro_emprestado">
+
+                  {% for livro in livros_emprestar %}
+                  <option value="{{livro.id}}">{{livro.nome}}</option>
+                  {% endfor %}
+
+                </select>
+                <br>
+                <Input type="submit" value="Emprestar" class="btn btn-success"> 
+              </form>
+            </div>
+
+            <!-- Formulário para registrar Devolução -->
+            <div style="display: none;" id="devolucao">
+              <form action="{% url 'devolver_livro' %}" method="POST">
+                {% csrf_token %}
+                <select class="form-control" name="id_livro_devolver">
+                  {% for livro in livros_emprestados %}
+                    <option value="{{livro.id}}">{{livro.nome}}</option>
+                  {%endfor%}
+                </select>
+                <br>
+                <button type="submit" class="btn btn-success">Devolver Livro</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Script para controlar a exibição dos formulários no modal -->
+    <script>
+      function mostrar_form(v1){
+        categoria = document.getElementById("categoria")
+        livro = document.getElementById("livro")
+        emprestimo = document.getElementById("emprestimos")
+        devolucao = document.getElementById("devolucao")
+
+        if(v1 == 1){
+          categoria.style.display = "block" <!-- Mostrar o formulario -->
+
+          livro.style.display = "none" 
+          emprestimo.style.display = "none"
+          devolucao.style.display = "none"
+        }else if(v1 == 2){
+          livro.style.display = "block"
+          
+          categoria.style.display = "none"  
+          emprestimo.style.display = "none"
+          devolucao.style.display = "none"
+        }else if(v1 == 3){
+          emprestimo.style.display = "block"
+          
+          categoria.style.display = "none"
+          livro.style.display = "none"
+          devolucao.style.display = "none"
+        }else if(v1 == 4){
+          devolucao.style.display = "block"
+
+          categoria.style.display = "none"
+          livro.style.display = "none"
+          emprestimo.style.display = "none" 
+        }
+      }
+
+      function exibe_input_emprestado(v1) {
+        if(v1 == 1){
+          document.getElementById("nome_emprestado").style.display = "none"
+          document.getElementById("nome_emprestado_anonimo").style.display = "block"
+        }else if(v1 == 2){
+          document.getElementById("nome_emprestado").style.display = "block"
+          document.getElementById("nome_emprestado_anonimo").style.display = "none"
+        }
+      }
+    </script>
+  </body>
+</html>
