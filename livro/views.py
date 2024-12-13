@@ -11,6 +11,7 @@ from django.http import JsonResponse #importar o JsonResponse do django
 from django.shortcuts import redirect
 import json
 from .models import Avaliacao
+
 # Create your views here.
 
 def home(request):
