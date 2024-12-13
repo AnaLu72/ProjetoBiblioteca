@@ -12,4 +12,5 @@ urlpatterns = [
     path('alterar_livro/', views.alterar_livro, name='alterar_livro'), #cria a rota alterar_livro e chama a função alterar_livro do arquivo views.py, é necessário passar o id do livro como parâmetro
     path('meus_emprestimos/', views.meus_emprestimos, name='meus_emprestimos'), #cria a rota meus_emprestimos e chama a função meus_emprestimos do arquivo views.py, é necessário passar o id do livro como parâmetro
     path('processa_avaliacao/', views.processa_avaliacao, name='processa_avaliacao'), #cria a rota processa_avaliacao e chama a função processa_avaliacao do arquivo views.py, é necessário passar o id do livro como parâmetro
+    path('historico/', views.historico_emprestimos, name='historico_emprestimos'), #cria a rota historicos e chama a função historicos do arquivo views.py, é necessário passar o id do livro como parâmetro
 ]

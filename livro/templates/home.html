@@ -60,20 +60,21 @@
           </div>
 
 
-    <div class="row">
-        <div class="col-md">
+    <div class="row" style="display: flex; flex-wrap: wrap;">
 
             {% for livro in livros %}
-            <div class="col-md">
-                <div class="card" style="width: 18rem;">
-                  <div class="card-body">
+            <div class="col-md-3 d-flex align-items-stretch"> <!-- define o tamanho da coluna (4 colunas por linha num grid de 12 colunas) -->
+                <div class="card" style="width: 100%; border: 1px solid #b8a9a9; border-radius: 5px; padding: 10px; margin-bottom: 20px; min-height: 350px;">
+                  <div class="card-body" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
                     {% if livro.img %}
-                    <img width="100%" src="{{livro.img.url}}" alt="{{livro.nome}}">
+                    <img width="70%" style="margin: 0 auto;" src="{{livro.img.url}}" alt="{{livro.nome}}">
                     {% else %}
-                    <img width="100%" src="/static/images/jardimlivro.jpg" alt="{{livro.nome}}">
+                    <img width="70%" style="margin: 0 auto;" src="/static/images/jardimlivro.jpg" alt="{{livro.nome}}">
                     {% endif %}
-
-                    <h5 class="card-title">{{livro.nome}}</h5>
+                    <br><br>
+                    
+                    <h5 class="card-title" style="text-align: center;">{{livro.nome}}</h5>
+                    <br>
                     <h6 style="display: inline;" class="card-subtitle mb-2 text-muted">Emprestado: </h6>
                     {% if livro.emprestado %}
                     <svg style="color: green" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-check-circle" viewBox="0 0 16 16">
@@ -86,12 +87,12 @@
                         <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708"/>
                       </svg>
                     {% endif %}
-                      <br>
-                      <br>
+                      <br><br>
                     <a href="{% url 'ver_livro' livro.id %}" class="btn btn-info">Consultar</a> <!--link dinâmico para ver detalhes do livro-->
                   </div>
                 </div>
             </div>
+            <br><br>
             {% endfor %}
             <br>
         </div>    

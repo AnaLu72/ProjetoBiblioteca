@@ -2,6 +2,9 @@ from django.db import models #importar o models do django
 from datetime import date, datetime #importar o date e o datetime do datetime   
 import datetime #importar o datetime
 from utilizadores.models import Utilizador #importar o modelo Utilizador do app utilizadores
+from django.core.exceptions import ValidationError
+
+
 
 # criar a classe Categoria que herda de models.Model
 class Categoria(models.Model):
@@ -53,8 +56,15 @@ class Emprestimos(models.Model):
    # data_emprestimo = models.DateTimeField(default=date.today)
     data_emprestimo = models.DateTimeField(default=datetime.datetime.now)
     data_devolucao = models.DateTimeField(blank = True, null = True)
-    livro = models.ForeignKey(Livros, on_delete = models.DO_NOTHING)
-    avalicao = models.CharField(max_length = 1, choices = choices, blank = True, null = True) #o campo pode estar em branco e ainda assim ser válido
+    livro = models.ForeignKey(Livros, on_delete = models.DO_NOTHING, blank = True, null = True)
+    avaliacao = models.CharField(max_length = 1, choices = choices, blank = True, null = True) #o campo pode estar em branco e ainda assim ser válido
+
+    def clean(self):
+        if not self.livro:
+            raise ValidationError('O campo livro é obrigatório.')
+        # Verifica se o livro existe
+        if not Livros.objects.filter(id=self.livro.id).exists():
+            raise ValidationError('Livro inválido.')
 
     class Meta:
         verbose_name = 'Emprestimo' #nome do modelo no admin, para aparecer no admin como Emprestimo
@@ -62,9 +72,13 @@ class Emprestimos(models.Model):
     def __str__(self): #função para mostrar o nome do emprestimo no admin
         return f"{self.nome_emprestado} | {self.livro}"
     
+class Avaliacao(models.Model):
+    livro = models.ForeignKey(Livros, on_delete=models.CASCADE)
+    avaliacao = models.CharField(max_length=255)  # Ou use outro tipo de campo para avaliação, como IntegerField para notas
+    data_avaliacao = models.DateTimeField(auto_now_add=True)
 
-
-
+    def __str__(self):
+        return f'Avaliação do livro {self.livro} - {self.avaliacao}'
 	
     
 
