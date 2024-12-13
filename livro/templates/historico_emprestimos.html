@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load filtros %}  
+
  
 
 
@@ -29,7 +31,13 @@
                 {% endif %}
                 <td>{{emprestimo.data_emprestimo}}</td>
                 <td>{{emprestimo.data_devolucao}}</td>
-                <td>{{emprestimo.data_devolucao|mostra_duracao:emprestimo.data_emprestimo }}</td>
+                <td>
+                    {% if emprestimo.data_devolucao and emprestimo.data_emprestimo %}
+                        {{emprestimo.duracao|mostra_duracao: "dias"}}
+                    {% else %}
+                        N/A
+                    {% endif %}
+                    </td>
                 <td>
                 {% if emprestimo.avaliacao == None and emprestimo.data_devolucao != None %}
                     <button onclick="avaliacao('{{emprestimo.id}}')" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal1" data-id="{{ emprestimo.id }}">Avaliar</button>
@@ -160,7 +168,7 @@
     </tbody>
 </table>
 </div>
-
+{% endblock %}
 <!-- Modal -->
 <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 <div class="modal-dialog" role="document"> 

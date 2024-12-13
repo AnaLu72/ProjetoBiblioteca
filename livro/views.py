@@ -79,16 +79,18 @@ def ver_livro(request, id):
     return redirect('/auth/login/?status=2')   
           
    
-def registar_livro(request): #criar a função registar_livro que recebe um request
-    if request.method == 'POST': #se o método da requisição for POST
-        form = RegistoLivro(request.POST, request.Files) #criar uma instância do formulário RegistoLivro com os dados do formulário
-        
-        if form.is_valid(): #verificar se o formulário é válido
-            form.save() #salvar o formulário
-            return redirect('/livro/home') #redirecionar para a página home
+def registar_livro(request):
+    if request.method == 'POST':
+        form = RegistoLivro(request.POST, request.FILES)  # Inclua request.FILES aqui
+        if form.is_valid():
+            form.save()  # Salva o livro no banco de dados
+            return redirect('home')  # Redireciona para a página inicial ou outra
         else:
-            return HttpResponse('Dados inválido') #se o formulário não for válido, retornar um erro
-    return redirect('/auth/login/?status=2') #se o método da requisição não for POST, redirecionar para a página de login
+            return render(request, 'registar_livro.html', {'form': form})
+    else:
+        form = RegistoLivro()
+        return render(request, 'registar_livro.html', {'form': form})
+
               
 def excluir_livro(request, id): #criar a função excluir_livro que recebe um request e o id do livro
         livros = Livros.objects.get(id = id).delete() #obter o livro com o id passado na url
@@ -176,10 +178,11 @@ def meus_emprestimos(request):
 
 
 
-def historico_emprestimos(request):
-    emprestimos = Emprestimos.objects.all().order_by('-data_emprestimo')  # Ordena pelo mais recente
-    livros = Livros.objects.all()  # Lista todos os livros
-    return render(request, 'historico_emprestimos.html', {'emprestimos': emprestimos, 'livros': livros})
+def historico_emprestimos(request): 
+    emprestimos = Emprestimos.objects.all() 
+    for emprestimo in emprestimos: 
+        print(f"Emprestimo ID: {emprestimo.id}, Data Empréstimo: {emprestimo.data_emprestimo}, Data Devolução: {emprestimo.data_devolucao}") 
+        return render(request, 'historico_emprestimos.html', {'emprestimos': emprestimos})
 
 def processa_avaliacao(request):
     if request.method == 'POST':

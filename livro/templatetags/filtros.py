@@ -22,6 +22,15 @@ def mostra_duracao(value1, value2): #criar um filtro para mostrar a duração do
     #return 'Não foi possível calcular a duração do livro'  #retornar uma mensagem de erro
 
 
+register = template.Library()
+
+@register.filter
+def mostra_duracao(valor, sufixo=" dias"):
+    if not isinstance(valor, int):
+        return f"Valor inválido: {valor}"
+    return f"{valor}{sufixo}"
+
+
 # "==" significa igualdade, retorna True se os valores forem iguais, retorna False se os valores forem diferentes
 # "!=" significa diferente, 
 # "and" significa e, 
@@ -38,12 +47,3 @@ def mostra_duracao(value1, value2): #criar um filtro para mostrar a duração do
 # "isinstance(value, type1) or isinstance(value, type2)" significa é uma instância de type1 ou type2, ou seja, é uma instância de type1 ou type2
 # "not isinstance(value, type1) and not isinstance(value, type2)" significa não é uma instância de type1 e não é uma instância de type2, ou seja, não é uma instância de type1 e não é uma instância de type2
 # "isinstance(value, (type1, type2, type3)) or isinstance(value, (type4, type5, type6))" significa é uma instância de type1, type2 ou type3 ou é uma instância de type4, type5 ou type6, ou seja, é uma instância de type1, type2, type3, type4, type5 ou type6
-
-register = template.Library()
-
-
-@register.filter
-def mostra_duracao(data_final, data_inicial):
-    # Assumindo que data_final e data_inicial são objetos datetime
-    duracao = data_final - data_inicial
-    return duracao.days
